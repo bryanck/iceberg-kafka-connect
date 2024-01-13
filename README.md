@@ -179,7 +179,7 @@ This example config connects to a Iceberg REST catalog.
 {
 "name": "events-sink",
 "config": {
-    "connector.class": "io.tabular.iceberg.connect.IcebergSinkConnector",
+    "connector.class": "org.apache.iceberg.connect.IcebergSinkConnector",
     "tasks.max": "2",
     "topics": "events",
     "iceberg.tables": "default.events",
@@ -218,7 +218,7 @@ PARTITIONED BY (hours(ts));
 {
 "name": "events-sink",
 "config": {
-    "connector.class": "io.tabular.iceberg.connect.IcebergSinkConnector",
+    "connector.class": "org.apache.iceberg.connect.IcebergSinkConnector",
     "tasks.max": "2",
     "topics": "events",
     "iceberg.tables": "default.events_list,default.events_create",
@@ -246,7 +246,7 @@ See above for creating two tables.
 {
 "name": "events-sink",
 "config": {
-    "connector.class": "io.tabular.iceberg.connect.IcebergSinkConnector",
+    "connector.class": "org.apache.iceberg.connect.IcebergSinkConnector",
     "tasks.max": "2",
     "topics": "events",
     "iceberg.tables.dynamic-enabled": "true",
@@ -275,7 +275,7 @@ See above for creating the table
 {
 "name": "events-sink",
 "config": {
-    "connector.class": "io.tabular.iceberg.connect.IcebergSinkConnector",
+    "connector.class": "org.apache.iceberg.connect.IcebergSinkConnector",
     "tasks.max": "2",
     "topics": "events",
     "iceberg.tables": "default.events",

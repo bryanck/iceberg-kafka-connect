@@ -19,7 +19,7 @@ The `CopyValue` SMT copies a value from one field to a new field.
 
 ```
 "transforms": "copyId",
-"transforms.copyId.type": "io.tabular.iceberg.connect.transforms.CopyValue",
+"transforms.copyId.type": "transforms.org.apache.iceberg.connect.CopyValue",
 "transforms.copyId.source.field": "id",
 "transforms.copyId.target.field": "id_copy",
 ```
