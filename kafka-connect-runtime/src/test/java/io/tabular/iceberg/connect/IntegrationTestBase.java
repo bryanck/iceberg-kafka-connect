@@ -130,7 +130,7 @@ public class IntegrationTestBase {
   }
 
   protected void send(String topicName, TestEvent event, boolean useSchema) {
-    String eventStr = event.serialize(useSchema);
+    String eventStr = event.serializeStructId(useSchema);
     producer.send(new ProducerRecord<>(topicName, Long.toString(event.id()), eventStr));
   }
 

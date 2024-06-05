@@ -19,7 +19,9 @@
 package io.tabular.iceberg.connect;
 
 import static io.tabular.iceberg.connect.TestEvent.TEST_SCHEMA;
+import static io.tabular.iceberg.connect.TestEvent.TEST_SCHEMA_STRUCT_ID;
 import static io.tabular.iceberg.connect.TestEvent.TEST_SPEC;
+import static io.tabular.iceberg.connect.TestEvent.TEST_SPEC_STRUCT_ID;
 import static org.apache.iceberg.TableProperties.FORMAT_VERSION;
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -66,7 +68,7 @@ public class IntegrationCdcTest extends IntegrationTestBase {
   @ValueSource(strings = "test_branch")
   public void testIcebergSinkPartitionedTable(String branch) {
     catalog.createTable(
-        TABLE_IDENTIFIER, TEST_SCHEMA, TEST_SPEC, ImmutableMap.of(FORMAT_VERSION, "2"));
+        TABLE_IDENTIFIER, TEST_SCHEMA_STRUCT_ID, TEST_SPEC_STRUCT_ID, ImmutableMap.of(FORMAT_VERSION, "2"));
 
     boolean useSchema = branch == null; // use a schema for one of the tests
     runTest(branch, useSchema);
@@ -88,7 +90,8 @@ public class IntegrationCdcTest extends IntegrationTestBase {
   @NullSource
   @ValueSource(strings = "test_branch")
   public void testIcebergSinkUnpartitionedTable(String branch) {
-    catalog.createTable(TABLE_IDENTIFIER, TEST_SCHEMA, null, ImmutableMap.of(FORMAT_VERSION, "2"));
+    catalog.createTable(
+        TABLE_IDENTIFIER, TEST_SCHEMA_STRUCT_ID, null, ImmutableMap.of(FORMAT_VERSION, "2"));
 
     boolean useSchema = branch == null; // use a schema for one of the tests
     runTest(branch, useSchema);
@@ -110,6 +113,7 @@ public class IntegrationCdcTest extends IntegrationTestBase {
     // set offset reset to earliest so we don't miss any test messages
     KafkaConnectContainer.Config connectorConfig =
         new KafkaConnectContainer.Config(connectorName)
+            .config("iceberg.tables.default-id-columns", "cdc.key")
             .config("topics", testTopic)
             .config("connector.class", IcebergSinkConnector.class.getName())
             .config("tasks.max", 2)
