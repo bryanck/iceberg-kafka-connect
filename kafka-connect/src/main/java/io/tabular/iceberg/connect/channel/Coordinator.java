@@ -37,6 +37,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.apache.iceberg.AppendFiles;
 import org.apache.iceberg.DataFile;
@@ -296,5 +297,21 @@ public class Coordinator extends Channel {
       snapshot = parentSnapshotId != null ? table.snapshot(parentSnapshotId) : null;
     }
     return ImmutableMap.of();
+  }
+
+  @Override
+  public void stop() {
+    exec.shutdownNow();
+
+    // ensure coordinator tasks are shut down, else cause the sink worker to fail
+    try {
+      if (!exec.awaitTermination(1, TimeUnit.MINUTES)) {
+        throw new RuntimeException("Timed out waiting for coordinator shutdown");
+      }
+    } catch (InterruptedException e) {
+      throw new RuntimeException("Interrupted while waiting for coordinator shutdown", e);
+    }
+
+    super.stop();
   }
 }
